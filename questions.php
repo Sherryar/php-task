@@ -26,6 +26,17 @@
     </form>
 */
 
+/* 
+ * ANSWER 1
+ * a) This snippet would submit to 'yourscript.php', where we can check incoming $_POST requests, sanitised of course.
+ * b) Use both regex in the html (now supported email types) as well as in the POST request script to check it's valid email e.g. '.' and '@' ... actually Laravel already has a validation feature to leverage this!
+ * c) For security, SQL injections etc. don't do direct, prepared statements are key, so use leverage PDO's binding features, or MySQLi, or Eloquent ORM in Laravel.
+ *    Once a) and b) are done, for c) It's basically something like:
+ * $dbConn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbusername, $dbpassword);
+ * $statement = $dbConn->prepare('INSERT INTO Users (name, email) VALUES (:name, :email');
+ * $statement->execute(['name' => 'Jane Doe', 'email' => 'jdoe@example.com']);
+ */
+
 /*
 QUESTION 2
  * Based on the data table below, please provide MySQL examples for the following requests:
@@ -47,8 +58,20 @@ QUESTION 2
 */
 
 /*
+ANSWER 2
+* a) 'SELECT * FROM Users;' // Or specifically type the id, name, gender, is_logged_in.  Number of reasons behind this actually...
+* b) 'UPDATE Users SET name = 'John' WHERE id = 3;' // Or whatever record, but normally this would be dynamic in an app
+* c) 'DELETE FROM Users WHERE id = 3;' // Again, could be any you want, but IRL we'd archive/soft delete not actually delete a record.
+*/
+
+/*
 QUESTION 3
  * Looking at the above data table, suggest some appropriate data types and indexes for the columns.
+*/
+
+/*
+ANSWER 3
+* You'd probably want to keep an eye on users logged in and action on that event so an index for that likely.  Since boolean could go for a TINYINT(1) or the new boolean type.  Depends on your app.
 */
 
 /*
@@ -73,9 +96,19 @@ QUESTION 4
 */
 
 /*
+ANSWER 4
+* 'SELECT u.name, s.sport FROM Users u LEFT JOIN UserSports on u.id = s.id;'
+*/
+
+/*
 QUESTION 5
  * Describe in your own words what you would need to do if you wanted to list the name of
    each person alongside all the sports that they play separated by a comma (,)?
+*/
+
+/*
+ANSWER 5
+* There's several ways i.e. a MySQL query using the the joins and concat with comma to get a list.  Or if in a web app, then implode() on the array with a comma separated list as a string.  There's more but these are the 2 common ones and can even be used together.
 */
 
 /*
@@ -97,6 +130,10 @@ QUESTION 6
     | 4          | 3       | 2015-05-20 00:00:00 | 50.00 |
     +------------+---------+---------------------+-------+
 */
+
+/*
+ANSWER 6
+* a) saving changes because I might lose this.
 
 /*
 QUESTION 7
