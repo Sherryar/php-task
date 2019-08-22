@@ -133,8 +133,10 @@ QUESTION 6
 
 /*
 ANSWER 6
-* a) saving changes because I might lose this.
-
+* a) Wait hang on, why is February on a 30th?! Arrgghh you sneaky... anyway:
+      'SELECT u.name, SUM(o.cost) AS total_spend FROM Users u INNER JOIN Orders o ON u.id = o.user_id GROUP BY u.name;'
+* b) Unless I'm interpreting wrong, isn't this just the same except an ORDER DESC? i.e. 'SELECT u.name SUM(o.cost) AS latest_order_total FROM Users u INNER JOIN Order o ON u.id = o.user_id GROUP BY u.name ORDER BY o.date_ordered DESC;'
+* c) select the month from the datetime, alongside the grouping for sum of cost for that month (jan, feb, may - and relevant total cost)
 /*
 QUESTION 7
  * The following array contains a number of recipes and their corresponsing ingredients.
@@ -143,20 +145,23 @@ QUESTION 7
  * b) a quantity
 */
 
+/* ANSWER 7
+
 $recipes = [
     'Spindogs Magic Drink' => [
-        'Sugar',
-        'Chocolate',
-        'Squash',
-        'Coffee'
+        'Sugar' => ['unit_price' => 2.00, 'qty' => 2],
+        'Chocolate' => ['unit_price' => 2.50, 'qty' => 2],
+        'Squash' => ['unit_price' => 4.00, 'qty' => 1],
+        'Coffee' => ['unit_price' => 5.00, 'qty' => 1],
     ],
     'Spindogs Punch' => [
-        'Rum',
-        'Vodka',
-        'Orange Juice',
-        'Lime'
-    ]
+        'Rum' => ['unit_price' => 3.00, 'qty' => 1],
+        'Vodka' => ['unit_price' => 2.00, 'qty' => 2],
+        'Orange Juice' => ['unit_price' => 3.50, 'qty' => 3],
+        'Lime' => ['unit_price' => 4.00, 'qty' => 1],
+    ],
 ];
+*/
 
 /*
 QUESTION 8
@@ -164,6 +169,57 @@ QUESTION 8
  * a) Display the name of each recipe and list the ingredients
  * b) Display the cost of each recipe
  * c) Display the total cost of **all recipes**
+*/
+
+/*
+ANSWER 8
+* a) foreach ($recipes as $rec => $ings) {
+       echo "$rec\n";
+    
+       foreach ($ings as $ing => $sums) {
+         echo "- $ing\n";
+       }
+     }
+     
+     Output:
+     Spindogs Magic Drink
+      - Sugar
+      - Chocolate
+      - Squash
+      - Coffee
+      Spindogs Punch
+      - Rum
+      - Vodka
+      - Orange Juice
+      - Lime
+      
+* b) foreach ($recipes as $rec => $ings) {
+       foreach ($ings as $ing => $sums) {
+         echo "$ing Cost: " . $sums['unit_price'] * $sums['qty'] . "\n";
+       }
+     }
+     
+     Output:
+      Sugar Cost: 4
+      Chocolate Cost: 5
+      Squash Cost: 4
+      Coffee Cost: 5
+      Rum Cost: 3
+      Vodka Cost: 4
+      Orange Juice Cost: 10.5
+      Lime Cost: 4
+      
+* c) $sumAllRecipes = [];
+      foreach ($recipes as $rec => $ings) {
+          foreach ($ings as $ing => $sums) {
+              $sumAllRecipes[] = $sums['unit_price'] * $sums['qty'];
+          }
+      }
+      
+      echo "Total cost of ALL recipes: " . array_sum($sumAllRecipes);
+      
+      Output:
+      Total cost of ALL recipes: 39.5
 */
 
 /*
@@ -192,14 +248,35 @@ QUESTION 9
 */
 
 /*
+ANSWER 9
+* Ideally, we shouldn't be mixing PHP server-side and front-end code together like this.
+* The global request variables shouldn't be used, but if so, should be sanitised.  It's being echoed straight away without even checking that there's a request incoming in the first place.
+* Where is the 'is_logged_in()' coming from? Why are there no other permission masks, roles, identities etc.?
+* Literally anyone logged in could just go ahead and DELETE a product!
+* The product IDs should be dynamic and not hard-coded.
+* Consider a PHP compatible templating such as Twig or Blade.  This is really really messy.
+*/
+
+/*
 QUESTION 10
  * Write some PHP code to list the date of each day, starting with the current date
    and ending with the 10th day of the next month (in the format: Thursday 1st January 2015).
 */
+/*
+ANSWER 10
+
+<?php
+   
 
 /*
 QUESTION 11
  * Describe in your own words the difference between a class and an object.
+*/
+/*
+ANSWER 11
+
+You'd create a class, which is kind of like the blueprint.  You instantiate it then as an object with whatever properties.  E.g. a car, or animal or whatever.  Want me to quote StackOverflow? There's so many different types of classes and extentions and interfaces and templates etc.
+
 */
 
 /*
@@ -210,3 +287,23 @@ QUESTION 12
  * a) Eat honey every 2 hours and remember when they last had honey
  * b) Decide if they need to sleep
 */
+
+/*
+ANSWER 12
+
+<?php
+
+namespace App;
+
+class Bear
+{
+
+   public $honeyTime;
+   public $isAsleep;
+
+   public function __construct($honeyTime = 2, $isAsleep = false) {
+      $this->honeyTime = $honeyTime;
+      $this->isAsleep = $isAsleep;
+   }
+
+}
