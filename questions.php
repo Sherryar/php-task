@@ -181,7 +181,7 @@ ANSWER 8
        }
      }
      
-     Output:
+     /* Output:
      Spindogs Magic Drink
       - Sugar
       - Chocolate
@@ -191,7 +191,8 @@ ANSWER 8
       - Rum
       - Vodka
       - Orange Juice
-      - Lime
+      - Lime */
+/*
       
 * b) foreach ($recipes as $rec => $ings) {
        foreach ($ings as $ing => $sums) {
@@ -199,7 +200,7 @@ ANSWER 8
        }
      }
      
-     Output:
+    /* Output:
       Sugar Cost: 4
       Chocolate Cost: 5
       Squash Cost: 4
@@ -207,8 +208,8 @@ ANSWER 8
       Rum Cost: 3
       Vodka Cost: 4
       Orange Juice Cost: 10.5
-      Lime Cost: 4
-      
+      Lime Cost: 4 */
+/*      
 * c) $sumAllRecipes = [];
       foreach ($recipes as $rec => $ings) {
           foreach ($ings as $ing => $sums) {
@@ -218,8 +219,8 @@ ANSWER 8
       
       echo "Total cost of ALL recipes: " . array_sum($sumAllRecipes);
       
-      Output:
-      Total cost of ALL recipes: 39.5
+      // Output:
+      // Total cost of ALL recipes: 39.5
 */
 
 /*
@@ -266,7 +267,25 @@ QUESTION 10
 ANSWER 10
 
 <?php
+// You can use date() or the DateTime for this, either or combo should work.
+   // Current day in the format specified
+   echo date('l dS F Y');
    
+   // Output:
+   // Thursday 22nd August 2019
+   
+   // If you want every day of the month from current then:
+   $start    = new DateTime('today');
+   $end      = new DateTime('last day of this month');
+   $interval = new DateInterval('P1D');
+   $period   = new DatePeriod($start, $interval, $end);
+   foreach ($period as $dt) {
+       echo $dt->format('l dS F Y') . "\n";
+   }
+
+   // 10th day of next month
+   echo date('l dS F Y', strtotime('+9 days', strtotime('first day of ' . ((int)date('j') < 10 ? 'this' : 'next' ) . ' month')));
+*/
 
 /*
 QUESTION 11
@@ -298,12 +317,39 @@ namespace App;
 class Bear
 {
 
-   public $honeyTime;
+   public $lastEatenHoney;
    public $isAsleep;
 
-   public function __construct($honeyTime = 2, $isAsleep = false) {
-      $this->honeyTime = $honeyTime;
-      $this->isAsleep = $isAsleep;
+   public function __construct(\DateTime $lastEatenHoney) {
+      $this->lastEatenHoney = $lastEatenHoney;
+      $this->isAsleep = false;
    }
-
+   
+   public function getLastEatenHoney() {
+      return $this->lastEatenHoney;
+   }
+   
+   public function setLastEatenHoney(\DateTime $lastEatenHoney) {
+      return $this->lastEatenHoney = $lastEatenHoney;
+   }
+   
+   public function canEatHoney() {
+      $now = new \DateTime();
+      return $now->diff($this->getLastEatenHoney())->format('%h') >= 2;
+   }
+   
+   public function eatHoney() {
+      $this->setLastEatenHoney(new \DateTime());
+   }
+   
+   public function sleep() {
+      $this->isAsleep = true;
+   }
+   
+   public function awake() {
+      $this->isAsleep = false;
+   }
 }
+*/
+
+// Note: not the way you'd normally do it, since PHP 7+ and MVC frameworks, using interface classes and implenting this Bear as an Animal or whatever, checking the lifecycle/energy of the bear and so on, so that more control over dynamic sleeping and eating and waking and shitting...
